@@ -4,7 +4,16 @@ import * as actions from "./todoActions";
 const initialState = {
   todos: [],
 };
-export const TodoContext = createContext();
+export const TodoContext = createContext({
+  todos: [],
+  addTodo: () => {},
+  removeTodo: () => {},
+  editTodo: () => {},
+  starTodo: () => {},
+  addSubtask: () => {},
+  removeSubtask: () => {},
+  editSubtask: () => {},
+});
 const TodoProvider = ({ children }) => {
   const [state, dispatch] = useReducer(todoReducer, initialState);
   const addTodo = (todo) => {
@@ -19,16 +28,16 @@ const TodoProvider = ({ children }) => {
   const starTodo = (id) => {
     dispatch({ type: actions.STAR_TODO, payload: id });
   };
-  const addSubtask = (taskId, subtask) => {
-    dispatch({ type: actions.ADD_SUBTASK, payload: { taskId, subtask } });
+  const addSubtask = (todoId, subtask) => {
+    dispatch({ type: actions.ADD_SUBTASK, payload: { todoId, subtask } });
   };
-  const removeSubtask = (taskId, subtaskId) => {
-    dispatch({ type: actions.REMOVE_SUBTASK, payload: { taskId, subtaskId } });
+  const removeSubtask = (todoId, subtaskId) => {
+    dispatch({ type: actions.REMOVE_SUBTASK, payload: { todoId, subtaskId } });
   };
-  const editSubtask = (taskId, subtaskId, data) => {
+  const editSubtask = (todoId, subtaskId, data) => {
     dispatch({
       type: actions.EDIT_SUBTASK,
-      payload: { taskId, subtaskId, data },
+      payload: { todoId, subtaskId, data },
     });
   };
   const todoCtx = {
