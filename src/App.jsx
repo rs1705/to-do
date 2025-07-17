@@ -1,11 +1,9 @@
 import { useState } from "react";
 import "./App.css";
-import Header from "./components/header/header";
-import TodoList from "./components/todoList/todoList";
-import InputItem from "./components/InputItem/InputItem";
+import Header from "./components/header";
+import TodoList from "./components/todoList";
+import InputItem from "./components/InputItem";
 import todos from "./demoTodos";
-import Login from "./components/login/Login";
-import { BrowserRouter as Router, Routes, Route  } from "react-router-dom";
 
 const App = () => {
   const [list, setList] = useState(todos);
@@ -51,22 +49,22 @@ const App = () => {
   };
 
   return (
+    <div>
+      <Header />
+
+      {/* <Route path="/login" element={<Login />} /> */}
+
+      <InputItem addHandler={addHandler} item={item} setItem={setItem} />
+      {msg && <div className="text-red-500 text-center mt-2">{msg}</div>}
       <div>
-        <Header />
-
-          {/* <Route path="/login" element={<Login />} /> */}
-
-        <InputItem addHandler={addHandler} item={item} setItem={setItem} />
-        {msg && <div className="text-red-500 text-center mt-2">{msg}</div>}
-        <div>
-          <TodoList
-            items={list}
-            onRemove={removeItem}
-            onEdit={editItem}
-            onComplete={completeItem}
-          />
-        </div>
+        <TodoList
+          items={list}
+          onRemove={removeItem}
+          onEdit={editItem}
+          onComplete={completeItem}
+        />
       </div>
+    </div>
   );
 };
 

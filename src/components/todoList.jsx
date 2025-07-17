@@ -1,4 +1,4 @@
-import TodoItem from "../todoItem/todoItem";
+import TodoItem from "./todoItem";
 const TodoList = ({ items, onRemove, onEdit, onComplete }) => {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4 text-white">
