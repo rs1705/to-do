@@ -16,7 +16,7 @@ const todoReducer = (state, action) => {
     case actions.EDIT_TODO: {
       const editedTodos = state.todos.map((item) =>
         item.id === action.payload.id
-          ? { ...item, title: action.payload.title }
+          ? { ...item, title: action.payload.data }
           : item
       );
       return { ...state, todos: editedTodos };

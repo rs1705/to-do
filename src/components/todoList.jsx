@@ -1,21 +1,17 @@
+import { useContext } from "react";
+import { TodoContext } from "../context/TodoContext";
+
 import TodoItem from "./todoItem";
-const TodoList = ({ items, onRemove, onEdit, onComplete }) => {
+const TodoList = () => {
+  const todoCtx = useContext(TodoContext);
+  const todos = todoCtx.todos;
+  console.log(todos);
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full p-4 text-white">
-      {items.length > 0 ? (
-        items.map(
+    <div className="flex flex-col w-full h-full">
+      {todos.length > 0 ? (
+        todos.map(
           (item, count = 1) => (
-            count++,
-            (
-              <TodoItem
-                key={item.id}
-                item={item}
-                count={count}
-                onRemove={onRemove}
-                onEdit={onEdit}
-                onComplete={onComplete}
-              />
-            )
+            count++, (<TodoItem key={item.id} details={item} count={count} />)
           )
         )
       ) : (

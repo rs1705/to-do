@@ -1,10 +1,18 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: rgb(0, 0, 0);
-  color-scheme: light dark;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  
+@import "tailwindcss";
+html{
+  box-sizing: border-box;
+}
+.sidebar{
+  position: fixed;
+  top:0;
+  left:0;
+  width: 280px;
+  height: 100vh;
+}
+
+.content-container{
+  position: fixed;
+  margin-left:280px;
+  width: 70vw;
+
 }
