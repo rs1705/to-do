@@ -1,13 +1,16 @@
 import Button from "../UI/Button";
 import { TodoContext } from "../context/TodoContext";
 import { useContext } from "react";
-const Sidebar = ({ onSelectId }) => {
+const Sidebar = () => {
   const todos = useContext(TodoContext).todos;
-
-  const todoClickHandler = (id) => {
-    onSelectId(id);
+  const { setSelectedId, selectedId } = useContext(TodoContext);
+  const selectTodoHandler = (id) => {
+    setSelectedId(id);
   };
 
+  const createTodoHandler = () => {
+    setSelectedId("add");
+  };
   return (
     <div className="bg-slate-900 text-stone-100 sidebar ">
       <span>
@@ -24,6 +27,7 @@ const Sidebar = ({ onSelectId }) => {
         <Button
           className="bg-slate-300 hover:bg-slate-400 hover:cursor-pointer py-1 px-2 rounded text-slate-900"
           title="+ Add task&nbsp;"
+          onClick={createTodoHandler}
         />
       </div>
       <div className="mt-2">
@@ -41,8 +45,10 @@ const Sidebar = ({ onSelectId }) => {
               {todos.map((todo) => (
                 <li
                   key={todo.id}
-                  className="list-disc hover:bg-slate-500 pl-2 p-1 hover:text-slate-200 hover:cursor-pointer text-md"
-                  onClick={() => todoClickHandler(todo.id)}
+                  className={`list-disc hover:bg-slate-500 pl-2 p-1 hover:text-slate-200 hover:cursor-pointer text-md ${
+                    todo.id === selectedId ? "bg-slate-500 text-white" : ""
+                  }`}
+                  onClick={() => selectTodoHandler(todo.id)}
                 >
                   {todo.title}
                 </li>

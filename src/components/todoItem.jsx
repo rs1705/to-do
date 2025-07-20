@@ -1,90 +1,88 @@
 import { useContext, useState } from "react";
 import { TodoContext } from "../context/TodoContext";
-import Subtask from "./Subtask";
-import { ArrowDown, ArrowUp, Check, Pen, PenTool } from "lucide-react";
+import Subtasks from "./Subtask";
+import { SquarePen, X } from "lucide-react";
 import NewSubtask from "./NewSubtask";
+import Modal from "./Modal";
 
-const TodoItem = ({ count, item }) => {
+const TodoItem = ({ item }) => {
   const todoCtx = useContext(TodoContext);
-  const [hidden, setHidden] = useState(true);
-  const [editing, setEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(item.title);
+  const setSelectedId = useContext(TodoContext).setSelectedId;
 
-  const toggleitemHandler = () => {
-    setHidden((prev) => !prev);
+  const [editing, setEditing] = useState(false);
+
+  const openModal = () => {
+    setEditing(true);
+  };
+  const closeModal = () => {
+    setEditing(false);
   };
 
-  const toggleEditHandler = () => {
-    if (editing) {
-      // Only try to save if we're leaving edit mode
-      const trimmed = newTitle.trim();
-
-      if (trimmed.length > 0 && trimmed !== item.title) {
-        todoCtx.editTodo(item.id, trimmed);
-      }
-
-      setEditing(false);
-    } else {
-      // We're entering edit mode, so sync current title
-      setNewTitle(item.title);
-      setEditing(true);
+  const removeTodoHandler = () => {
+    let ans = confirm("Delete the item?");
+    if (ans) {
+      todoCtx.removeTodo(item.id);
+      setSelectedId(null);
     }
   };
-
-  const toggleRemoveHandler = () => {
-    console.log(item.id);
-  };
-
-  const completeTodoHandler = () => {
-    todoCtx.starTodo(item.id);
-    console.log(todoCtx.todos);
-  };
-
   return (
-    <div className="">
-      <div className="todo-title-container flex p-2">
+    <div className="ml-2">
+      <div className="todo-title-container flex">
         <div className="inline-flex w-[90%] mt-1 font-bold">
-          <h2 className="text-slate-600 w-[100%] text-3xl">
-            {editing ? (
-              <input
-                type="text"
-                name="title-edit"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                className="border-1 bg-stone-100 focus:bg-stone-300"
-              />
-            ) : (
-              <span
-                className={todoCtx.todos.starred ? "bg-slate-200" : undefined}
-              >
-                {item.title}
-              </span>
-            )}
-          </h2>
+          <h2 className="text-slate-700 w-[100%] text-3xl">{item.title}</h2>
         </div>
+
+        {editing && item && <Modal todo={item} onClose={closeModal} />}
+
         <div className="inline-flex  justify-end">
           <button
-            className="bg-stone-100 hover:bg-slate-400 rounded-full m-1 p-1"
-            onClick={toggleEditHandler}
+            className="bg-slate-200 hover:bg-slate-300 hover:cursor-pointer rounded-full m-1 p-1"
+            onClick={openModal}
           >
-            {!editing ? <PenTool /> : <Check />}
+            <SquarePen />
           </button>
           <button
-            className="bg-stone-100 hover:bg-slate-400 rounded-full m-1 p-1"
-            onClick={toggleRemoveHandler}
-          ></button>
+            className="bg-slate-100 hover:bg-slate-300 hover:cursor-pointer rounded-full m-1 p-1"
+            onClick={removeTodoHandler}
+          >
+            <X />
+          </button>
         </div>
       </div>
       <div>
-        <div className="todo-item-container pl-2 pt-0 pb-0">
-          <p className="text-slate-500">Due: {item.dueDate}</p>
-          <br />
-          <p className="text-slate-900">{item.description}</p>
+        <div className="todo-item-container pt-0 pb-0">
+          <p className="text-slate-800">{item.description}</p>
+          <p className="text-slate-400">Due: {item.dueDate}</p>
+          <p className="text-slate-600 font-semibold mt-2">
+            <span>Tags: </span>
+            {item.tags.map((tag) => (
+              <span
+                key={tag}
+                className="bg-amber-100 text-amber-500 px-2 py-1 mr-1 rounded-xl text-sm"
+              >
+                {tag.toUpperCase()}
+              </span>
+            ))}
+          </p>
         </div>
         <div>
-          <NewSubtask />
+          <br />
+          <NewSubtask
+            parentId={item.id}
+            id={item.id + item.subtasks.length + 1}
+            onAddSubtask={todoCtx.addSubtask}
+          />
+          {item.subtasks.length === 0 && (
+            <p className="text-amber-500 font-semibold">
+              There are no subtasks yet.{" "}
+            </p>
+          )}
           {item.subtasks && item.subtasks.length > 0 && (
-            <Subtask tasks={item.subtasks} />
+            <Subtasks
+              parentId={item.id}
+              tasks={item.subtasks}
+              onFinishSubtask={todoCtx.finishSubtask}
+            />
           )}
         </div>
       </div>

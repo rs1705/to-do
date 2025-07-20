@@ -1,4 +1,3 @@
-import { Plus } from "lucide-react";
 import { useContext, useRef } from "react";
 import { TodoContext } from "../context/TodoContext";
 const InputItem = () => {

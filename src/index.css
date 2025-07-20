@@ -1,7 +1,10 @@
 @import "tailwindcss";
-html{
+
+:root{
+  width:80%;
   box-sizing: border-box;
 }
+
 .sidebar{
   position: fixed;
   top:0;
@@ -13,6 +16,17 @@ html{
 .content-container{
   position: fixed;
   margin-left:280px;
-  width: 70vw;
+  width: 60%;
+}
+.todo-item-container::after{
+  content:"";
+  margin-top:7px;
+  position: absolute;
+  width:100%;
+  height:1px;
+  border-bottom: 2px solid #E2E8F0;
+}
 
+@media (width>720px) {
+  
 }

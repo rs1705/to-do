@@ -16,12 +16,12 @@ const todoReducer = (state, action) => {
     case actions.EDIT_TODO: {
       const editedTodos = state.todos.map((item) =>
         item.id === action.payload.id
-          ? { ...item, title: action.payload.data }
+          ? { ...item, ...action.payload.data }
           : item
       );
       return { ...state, todos: editedTodos };
     }
-    case actions.STAR_TODO: {
+    case actions.FINISH_TODO: {
       const updatedTodos = state.todos.map((item) =>
         item.id === action.payload ? { ...item, starred: !item.starred } : item
       );
@@ -64,10 +64,26 @@ const todoReducer = (state, action) => {
             }
           : item
       );
+
       return {
         ...state,
         todos: updatedTodos,
       };
+    }
+    case actions.FINISH_SUBTASK: {
+      const updatedTodos = state.todos.map((item) =>
+        item.id === action.payload.parentId
+          ? {
+              ...item,
+              subtasks: item.subtasks.map((subtask) =>
+                subtask.id === action.payload.subtaskId
+                  ? { ...subtask, isCompleted: !subtask.isCompleted }
+                  : subtask
+              ),
+            }
+          : item
+      );
+      return { ...state, todos: updatedTodos };
     }
 
     default:

@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useState } from "react";
 import todoReducer from "./todoReducer";
 import * as actions from "./todoActions";
 const initialState = {
@@ -11,6 +11,7 @@ const initialState = {
       priority: "high",
       dueDate: "2025-07-21",
       createdAt: "2025-07-17T10:00:00.000Z",
+      tags: ["react", "frontend", "project", "context-api"],
       subtasks: [
         { id: "1-1", title: "Set up project structure", isCompleted: true },
         { id: "1-2", title: "Create context and reducer", isCompleted: false },
@@ -24,6 +25,7 @@ const initialState = {
       priority: "medium",
       dueDate: "2025-07-22",
       createdAt: "2025-07-17T11:15:00.000Z",
+      tags: ["javascript", "es6", "promises", "async-await", "learning"],
       subtasks: [
         { id: "2-1", title: "Review closures", isCompleted: true },
         { id: "2-2", title: "Practice arrow functions", isCompleted: false },
@@ -37,9 +39,9 @@ const initialState = {
       priority: "high",
       dueDate: "2025-07-19",
       createdAt: "2025-07-17T12:00:00.000Z",
+      tags: ["jobs", "frontend", "career", "resume"],
       subtasks: [],
     },
-
     {
       id: "10",
       title: "Backup Codebase",
@@ -48,6 +50,7 @@ const initialState = {
       priority: "low",
       dueDate: "2025-07-18",
       createdAt: "2025-07-17T15:30:00.000Z",
+      tags: ["git", "github", "version-control", "backup"],
       subtasks: [
         { id: "10-1", title: "Commit changes", isCompleted: true },
         { id: "10-2", title: "Push to repo", isCompleted: false },
@@ -57,16 +60,21 @@ const initialState = {
 };
 export const TodoContext = createContext({
   todos: [],
+  selectedId: false,
+  setSelectedId: () => {},
   addTodo: () => {},
   removeTodo: () => {},
   editTodo: () => {},
-  starTodo: () => {},
+  finishTodo: () => {},
   addSubtask: () => {},
   removeSubtask: () => {},
   editSubtask: () => {},
+  finishSubtask: () => {},
 });
 const TodoProvider = ({ children }) => {
   const [state, dispatch] = useReducer(todoReducer, initialState);
+  const [selectedId, setSelectedId] = useState(null);
+
   const addTodo = (todo) => {
     dispatch({ type: actions.ADD_TODO, payload: todo });
   };
@@ -78,8 +86,8 @@ const TodoProvider = ({ children }) => {
     console.log(data);
     dispatch({ type: actions.EDIT_TODO, payload: { id, data } });
   };
-  const starTodo = (id) => {
-    dispatch({ type: actions.STAR_TODO, payload: id });
+  const finishTodo = (id) => {
+    dispatch({ type: actions.FINISH_TODO, payload: id });
   };
   const addSubtask = (todoId, subtask) => {
     dispatch({ type: actions.ADD_SUBTASK, payload: { todoId, subtask } });
@@ -93,16 +101,25 @@ const TodoProvider = ({ children }) => {
       payload: { todoId, subtaskId, data },
     });
   };
+  const finishSubtask = (parentId, subtaskId) => {
+    dispatch({
+      type: actions.FINISH_SUBTASK,
+      payload: { parentId, subtaskId },
+    });
+  };
 
   const todoCtx = {
     todos: state.todos,
+    selectedId,
+    setSelectedId,
     addTodo,
     removeTodo,
     editTodo,
-    starTodo,
+    finishTodo,
     addSubtask,
     removeSubtask,
     editSubtask,
+    finishSubtask,
   };
 
   return (

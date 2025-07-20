@@ -1,9 +1,20 @@
-const Subtask = ({ tasks }) => {
-  const SubtaskItem = ({ item }) => {
+const Subtasks = ({ parentId, tasks, onFinishSubtask }) => {
+  const SubtaskItem = ({ item, onFinish }) => {
+    const completeSubtaskHandler = () => {
+      console.log(parentId + " " + item.id);
+      onFinish(parentId, item.id);
+    };
     return (
       <p className="flex">
-        <input type="checkbox" />
-        <span className="ml-2 mt-1" key={item.id}>
+        <input
+          type="checkbox"
+          onChange={completeSubtaskHandler}
+          checked={item.isCompleted}
+        />
+        <span
+          className={!item.isCompleted ? "ml-2 mt-1" : "ml-2 mt-1 line-through"}
+          key={item.id}
+        >
           {item.title}
         </span>
       </p>
@@ -11,15 +22,21 @@ const Subtask = ({ tasks }) => {
   };
 
   return (
-    <div className="mb-7 p-2 bg-slate-50 rounded-lg w-[90%]">
+    <div className="p-2 bg-slate-100 rounded-lg w-[100%]">
       <h3 className="font-bold  text-stone-800">Subtasks:</h3>
-      <ol className="ml-5 list-decimal">
+      <ol className="ml-2">
         {tasks.map((subtask) => {
-          return <SubtaskItem key={subtask.id} item={subtask} />;
+          return (
+            <SubtaskItem
+              key={subtask.id}
+              item={subtask}
+              onFinish={onFinishSubtask}
+            />
+          );
         })}
       </ol>
     </div>
   );
 };
 
-export default Subtask;
+export default Subtasks;

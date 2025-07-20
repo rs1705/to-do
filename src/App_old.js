@@ -55,4 +55,29 @@ const App = () => {
   //);
 };
 
-export default App;
+const todos = [
+  {
+    id: "1",
+    title: "Build Todo App",
+    description: "Create a complete todo app using React",
+    isCompleted: false,
+    priority: "high",
+    dueDate: "2025-07-21",
+    createdAt: "2025-07-17T10:00:00.000Z",
+    tags: ["react", "frontend", "project", "context-api"],
+    subtasks: [
+      { id: "1-1", title: "Set up project structure", isCompleted: true },
+      { id: "1-2", title: "Create context and reducer", isCompleted: false },
+    ],
+  },
+];
+
+const updatedDetails = {
+  title: "New title",
+  description: "new Desc",
+  dueDate: "x",
+  tags: ["new", "tags"],
+};
+const a = [{ ...todos[0], ...updatedDetails }];
+
+console.log(a);
