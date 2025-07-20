@@ -7,7 +7,6 @@ const Home = () => {
   const todos = useContext(TodoContext).todos;
   const selectedId = useContext(TodoContext).selectedId;
   const selectedTodo = todos.find((todo) => todo.id === selectedId);
-  console.log(selectedId);
   let content;
 
   if (selectedId === null) {
