@@ -1,6 +1,7 @@
 import Button from "../UI/Button";
 import { TodoContext } from "../context/TodoContext";
 import { useContext } from "react";
+import userLogo from "../assets/userLogo.png";
 const Sidebar = () => {
   const todos = useContext(TodoContext).todos;
   const { setSelectedId, selectedId } = useContext(TodoContext);
@@ -11,19 +12,31 @@ const Sidebar = () => {
   const createTodoHandler = () => {
     setSelectedId("add");
   };
+
+  const loginClickHandler = () => {
+    setSelectedId("login");
+  };
   return (
     <div className="bg-slate-900 text-stone-100 sidebar ">
-      <span>
+      <div className="relative top-1 left-55">
         <Button
-          title="login"
-          className="bg-slate-300 hover:bg-slate-400 hover: text-slate-500 text-slate-900 py-1 px-2 rounded hover:cursor-pointer"
+          className="bg-slate-300 hover:bg-slate-400 hover:cursor-pointer py-1 px-2 rounded text-slate-900"
+          title="Login"
+          onClick={loginClickHandler}
         />
-      </span>
-      <div className="mt-16  text-center">
-        <h1 className="text-3xl font-bold">Todo Manager</h1>
-        <p>Welcome user!</p>
       </div>
       <div className="mt-16  text-center">
+        <h1 className="text-3xl font-bold">Todo Manager</h1>
+        <div className="flex flex-col items-center">
+          <p className="mb-2">Welcome guest!</p>
+          <img
+            src={userLogo}
+            alt="user-image"
+            className="w-[80px] h-[80px] rounded-full bg-amber-50"
+          />
+        </div>
+      </div>
+      <div className="mt-5 text-center flex flex-col">
         <Button
           className="bg-slate-300 hover:bg-slate-400 hover:cursor-pointer py-1 px-2 rounded text-slate-900"
           title="+ Add task&nbsp;"

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
 import NewTodo from "../components/NewTodo";
 import TodoItem from "../components/todoItem";
+import AuthPage from "./Auth";
 const Home = () => {
   const todos = useContext(TodoContext).todos;
   const selectedId = useContext(TodoContext).selectedId;
@@ -21,11 +22,16 @@ const Home = () => {
     );
   } else if (selectedId === "add") {
     content = (
-      <div className="mt-40 ml-2 border-2 rounded-lg py-10 px-2 w-[100%]">
-        <h1 className="text-center text-xl">Create new todo</h1>
+      <div className="mt-40 ml-2 border-2 border-slate-300 rounded-xl py-5 px-2 w-[100%]">
+        <h1 className="text-2xl font-semibold text-center">Create New Task</h1>
+        <p className="text-sm text-slate-500 text-center mb-2">
+          Enter below details to create a new Task
+        </p>
         <NewTodo />
       </div>
     );
+  } else if (selectedId === "login") {
+    content = <AuthPage />;
   } else {
     content = (
       <div className="mt-40">
