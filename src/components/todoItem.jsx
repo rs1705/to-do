@@ -4,6 +4,7 @@ import Subtasks from "./Subtask";
 import { SquarePen, X } from "lucide-react";
 import NewSubtask from "./NewSubtask";
 import Modal from "./Modal";
+import Tags from "./Tags";
 
 const TodoItem = ({ item }) => {
   const todoCtx = useContext(TodoContext);
@@ -51,19 +52,9 @@ const TodoItem = ({ item }) => {
       </div>
       <div>
         <div className="todo-item-container pt-0 pb-0">
-          <p className="text-slate-800">{item.description}</p>
+          <p className="text-slate-600">{item.description}</p>
           <p className="text-slate-400">Due: {item.dueDate}</p>
-          <p className="text-slate-600 font-semibold mt-2">
-            <span>Tags: </span>
-            {item.tags.map((tag) => (
-              <span
-                key={tag}
-                className="bg-amber-100 text-amber-500 px-2 py-1 mr-1 rounded-xl text-sm"
-              >
-                {tag.toUpperCase()}
-              </span>
-            ))}
-          </p>
+          <Tags tagItems={item.tags} />
         </div>
         <div>
           <br />
@@ -74,7 +65,7 @@ const TodoItem = ({ item }) => {
           />
           {item.subtasks.length === 0 && (
             <p className="text-amber-500 font-semibold">
-              There are no subtasks yet.{" "}
+              There are no subtasks yet.
             </p>
           )}
           {item.subtasks && item.subtasks.length > 0 && (
