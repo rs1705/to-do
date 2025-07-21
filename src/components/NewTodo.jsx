@@ -9,6 +9,7 @@ const NewTodo = ({ method, todo, onClose }) => {
   const titleRef = useRef();
   const desRef = useRef();
   const dateRef = useRef();
+  const priorityRef = useRef();
   const tagsRef = useRef();
 
   const onCancelClick = () => {
@@ -23,6 +24,7 @@ const NewTodo = ({ method, todo, onClose }) => {
     const title = titleRef.current.value;
     const description = desRef.current.value;
     const dueDate = dateRef.current.value;
+    const priority = priorityRef.current.value;
     const tags = tagsRef.current.value.split(",");
 
     if (!title || !dueDate) {
@@ -35,18 +37,20 @@ const NewTodo = ({ method, todo, onClose }) => {
         title,
         description,
         dueDate,
+        priority,
         tags,
       };
       todoCtx.editTodo(todo.id, updatedItem);
       onClose();
     } else {
-      const newItemId = Math.random().toString(16).slice(2);
+      const newItemId = "id_" + Math.random().toString(16).slice(2);
       const newItem = {
         id: newItemId,
         title,
         description,
         isCompleted: false,
         dueDate,
+        priority,
         createdAt: new Date().toISOString(),
         tags,
         subtasks: [],
@@ -89,7 +93,8 @@ const NewTodo = ({ method, todo, onClose }) => {
           </label>
           <select
             className="flex-9/12 bg-slate-200 rounded py-1 px-2 "
-            name="Priority"
+            name="priority"
+            ref={priorityRef}
           >
             <option value="">{`--Priority--`}</option>
             <option value="Low">Low</option>

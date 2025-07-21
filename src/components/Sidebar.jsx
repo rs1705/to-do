@@ -54,7 +54,7 @@ const Sidebar = () => {
         />
       </div>
       <div className="mt-2">
-        {!todos.length > 0 && (
+        {todos && todos.length === 0 && (
           <p className="text-red-400 text-sm text-center">
             Click add button to add a new task
           </p>

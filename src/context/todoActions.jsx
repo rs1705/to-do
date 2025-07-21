@@ -6,3 +6,5 @@ export const ADD_SUBTASK = "ADD_SUBTASK";
 export const REMOVE_SUBTASK = "REMOVE_SUBTASK";
 export const EDIT_SUBTASK = "EDIT_SUBTASK";
 export const FINISH_SUBTASK = "FINISH_SUBTASK";
+export const L0AD_TODOS = "L0AD_TODOS";
+export const SAVE_TODOS = "SAVE_TODOS";

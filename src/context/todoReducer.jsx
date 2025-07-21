@@ -1,6 +1,12 @@
 import * as actions from "./todoActions";
 const todoReducer = (state, action) => {
   switch (action.type) {
+    case actions.L0AD_TODOS: {
+      return {
+        ...state,
+        todos: action.payload,
+      };
+    }
     case actions.ADD_TODO: {
       return {
         ...state,

@@ -34,7 +34,7 @@ const Home = () => {
   } else {
     content = (
       <div className="mt-40">
-        <TodoItem item={selectedTodo} />
+        {selectedTodo && <TodoItem item={selectedTodo} />}
       </div>
     );
   }
