@@ -29,13 +29,15 @@ const todoReducer = (state, action) => {
     }
     case actions.FINISH_TODO: {
       const updatedTodos = state.todos.map((item) =>
-        item.id === action.payload ? { ...item, starred: !item.starred } : item
+        item.id === action.payload
+          ? { ...item, isCompleted: !item.isCompleted }
+          : item
       );
       return { ...state, todos: updatedTodos };
     }
     case actions.ADD_SUBTASK: {
       const updatedTodos = state.todos.map((todo) =>
-        todo.id === action.payload.todoId
+        todo.id === action.payload.parentId
           ? { ...todo, subtasks: [...todo.subtasks, action.payload.subtask] }
           : todo
       );
@@ -46,7 +48,7 @@ const todoReducer = (state, action) => {
     }
     case actions.REMOVE_SUBTASK: {
       const updatedTodos = state.todos.map((item) =>
-        item.id === action.payload.todoId
+        item.id === action.payload.parentId
           ? {
               ...item,
               subtasks: item.subtasks.filter(
@@ -59,7 +61,7 @@ const todoReducer = (state, action) => {
     }
     case actions.EDIT_SUBTASK: {
       const updatedTodos = state.todos.map((item) =>
-        item.id === action.payload.todoId
+        item.id === action.payload.parentId
           ? {
               ...item,
               subtasks: item.subtasks.map((subtask) =>

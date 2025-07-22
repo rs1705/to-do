@@ -17,6 +17,7 @@
   position: fixed;
   margin-left:280px;
   width: 60%;
+
 }
 .todo-item-container::after{
   content:"";
@@ -27,6 +28,3 @@
   border-bottom: 2px solid #E2E8F0;
 }
 
-@media (width>720px) {
-  
-}

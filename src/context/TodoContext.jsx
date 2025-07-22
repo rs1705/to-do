@@ -7,13 +7,15 @@ import {
 } from "react";
 import todoReducer from "./todoReducer";
 import * as actions from "./todoActions";
-import { db } from "../firebase/Firebase";
 import { AuthContext } from "./AuthContext";
-import { doc, setDoc } from "firebase/firestore";
 import {
   fetchTodosFromFirestore,
   removeTodoFromFirestore,
-  updateTodoToFireStore,
+  updateTodoToFirestore,
+  addSubtaskToFirestore,
+  updateSubtaskToFirestore,
+  removeSubtaskFromFirestore,
+  addTodotoFirestore,
 } from "../firebase/todoService";
 import TODOS from "../demo_data/Todos";
 const initialState = {
@@ -50,12 +52,7 @@ const TodoProvider = ({ children }) => {
   const addTodo = async (todo) => {
     if (user) {
       try {
-        await setDoc(
-          doc(db, "todoData", user.uid, "userTodos", todo.id),
-          todo,
-          { merge: true }
-        );
-
+        await addTodotoFirestore(user.uid, todo);
         dispatch({ type: actions.ADD_TODO, payload: todo });
       } catch (error) {
         console.log("Error adding todo: ", error.message);
@@ -84,33 +81,90 @@ const TodoProvider = ({ children }) => {
   const editTodo = async (id, data) => {
     if (user) {
       try {
-        await updateTodoToFireStore(user.uid, id, data);
+        await updateTodoToFirestore(user.uid, id, data);
         dispatch({ type: actions.EDIT_TODO, payload: { id, data } });
       } catch (e) {
         console.log(e.message);
       }
     } else dispatch({ type: actions.EDIT_TODO, payload: { id, data } });
   };
-  const finishTodo = (id) => {
-    dispatch({ type: actions.FINISH_TODO, payload: id });
+
+  const finishTodo = async (todoId) => {
+    if (user) {
+      try {
+        await updateTodoToFirestore(user.uid, todoId, null);
+        dispatch({ type: actions.FINISH_TODO, payload: todoId });
+      } catch (e) {
+        console.log(e.message);
+      }
+    } else dispatch({ type: actions.FINISH_TODO, payload: todoId });
   };
-  const addSubtask = (todoId, subtask) => {
-    dispatch({ type: actions.ADD_SUBTASK, payload: { todoId, subtask } });
+
+  const addSubtask = async (parentId, subtask) => {
+    if (user) {
+      try {
+        await addSubtaskToFirestore(user.uid, parentId, subtask);
+        dispatch({ type: actions.ADD_SUBTASK, payload: { parentId, subtask } });
+      } catch (e) {
+        console.log(e.message);
+      }
+    } else
+      dispatch({ type: actions.ADD_SUBTASK, payload: { parentId, subtask } });
   };
-  const removeSubtask = (todoId, subtaskId) => {
-    dispatch({ type: actions.REMOVE_SUBTASK, payload: { todoId, subtaskId } });
+
+  const removeSubtask = async (parentId, subtaskId) => {
+    if (user) {
+      try {
+        await removeSubtaskFromFirestore(user.uid, parentId, subtaskId);
+        dispatch({
+          type: actions.REMOVE_SUBTASK,
+          payload: { parentId, subtaskId },
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    } else {
+      dispatch({
+        type: actions.REMOVE_SUBTASK,
+        payload: { parentId, subtaskId },
+      });
+    }
   };
-  const editSubtask = (todoId, subtaskId, data) => {
-    dispatch({
-      type: actions.EDIT_SUBTASK,
-      payload: { todoId, subtaskId, data },
-    });
+  const editSubtask = async (parentId, subtaskId, data) => {
+    if (user) {
+      try {
+        await updateSubtaskToFirestore(user.uid, parentId, subtaskId, data);
+        dispatch({
+          type: actions.EDIT_SUBTASK,
+          payload: { parentId, subtaskId },
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    } else {
+      dispatch({
+        type: actions.EDIT_SUBTASK,
+        payload: { parentId, subtaskId },
+      });
+    }
   };
-  const finishSubtask = (parentId, subtaskId) => {
-    dispatch({
-      type: actions.FINISH_SUBTASK,
-      payload: { parentId, subtaskId },
-    });
+  const finishSubtask = async (parentId, subtaskId) => {
+    if (user) {
+      try {
+        await updateSubtaskToFirestore(user.uid, parentId, subtaskId, null);
+        dispatch({
+          type: actions.FINISH_SUBTASK,
+          payload: { parentId, subtaskId },
+        });
+      } catch (e) {
+        console.log(e.message);
+      }
+    } else {
+      dispatch({
+        type: actions.FINISH_SUBTASK,
+        payload: { parentId, subtaskId },
+      });
+    }
   };
 
   const todoCtx = {

@@ -2,7 +2,7 @@ import { useRef } from "react";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 
-const NewSubtask = ({ id, parentId, onAddSubtask }) => {
+const NewSubtask = ({ id, parentId, onAddSubtask, onDisabled }) => {
   const subTaskRef = useRef();
 
   const addSubtaskHandler = () => {
@@ -18,9 +18,18 @@ const NewSubtask = ({ id, parentId, onAddSubtask }) => {
     }
   };
   return (
-    <div className="flex mb-4">
-      <Input title="Enter subtask..." style="mr-2" ref={subTaskRef} />
-      <Button title="+ Add " onClick={addSubtaskHandler} />
+    <div className="flex">
+      <Input
+        title="Enter subtask..."
+        style="mr-2"
+        ref={subTaskRef}
+        disabled={onDisabled}
+      />
+      <Button
+        title="+ Add "
+        onClick={addSubtaskHandler}
+        disabled={onDisabled}
+      />
     </div>
   );
 };

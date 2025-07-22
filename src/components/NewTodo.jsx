@@ -95,6 +95,7 @@ const NewTodo = ({ method, todo, onClose }) => {
             className="flex-9/12 bg-slate-200 rounded py-1 px-2 "
             name="priority"
             ref={priorityRef}
+            defaultValue={todo ? todo.priority : ""}
           >
             <option value="">{`--Priority--`}</option>
             <option value="Low">Low</option>

@@ -1,44 +1,38 @@
-const Subtasks = ({ parentId, tasks, onFinishSubtask }) => {
-  const SubtaskItem = ({ item, onFinish, idx }) => {
-    const completeSubtaskHandler = () => {
-      onFinish(parentId, item.id);
-    };
-    return (
-      <li className="flex list-disc">
-        <input
-          type="checkbox"
-          onChange={completeSubtaskHandler}
-          checked={item.isCompleted}
-          className=""
-        />
-        &nbsp;
-        <span
-          className={
-            !item.isCompleted ? "flex-11/12" : "line-through flex-11/12"
-          }
-          key={item.id}
-        >
-          {idx}. {item.title}
-        </span>
-      </li>
-    );
-  };
-
+import ProgressBar from "../UI/ProgressBar";
+import SubtaskItem from "./SubtaskItem";
+const Subtasks = ({
+  parentId,
+  tasks,
+  onFinishSubtask,
+  onRemoveSubtask,
+  onEditSubtask,
+}) => {
+  const completed = tasks.filter((task) => task.isCompleted).length;
+  const progressInc = Math.floor((completed / tasks.length) * 100);
   return (
     <div className="p-2 bg-slate-100 rounded-lg w-[100%]">
-      <h3 className="font-bold  text-stone-800">Subtasks:</h3>
-      <ol className="ml-2">
-        {tasks.map((subtask, idx) => {
-          return (
-            <SubtaskItem
-              key={subtask.id}
-              item={subtask}
-              onFinish={onFinishSubtask}
-              idx={idx + 1}
-            />
-          );
-        })}
-      </ol>
+      <div className="flex items-center">
+        <div className="flex-4/10">
+          <h3 className="text-slate-800 font-bold text-md">
+            Subtasks {completed}/{tasks.length}
+          </h3>
+        </div>
+        <ProgressBar className="flex-10/12" percentage={progressInc} />
+      </div>
+      <div className="mb-2 w-full"></div>
+      {tasks.map((subtask, idx) => {
+        return (
+          <SubtaskItem
+            key={parentId + subtask.id}
+            item={subtask}
+            onFinish={onFinishSubtask}
+            onRemove={onRemoveSubtask}
+            onEdit={onEditSubtask}
+            idx={idx + 1}
+            parentId={parentId}
+          />
+        );
+      })}
     </div>
   );
 };
