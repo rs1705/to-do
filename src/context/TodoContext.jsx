@@ -5,11 +5,13 @@ import {
   useReducer,
   useState,
 } from "react";
+import toast from "react-hot-toast";
 import todoReducer from "./todoReducer";
 import * as actions from "./todoActions";
 import { AuthContext } from "./AuthContext";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase/config";
 import {
-  fetchTodosFromFirestore,
   removeTodoFromFirestore,
   updateTodoToFirestore,
   addSubtaskToFirestore,
@@ -17,13 +19,11 @@ import {
   removeSubtaskFromFirestore,
   addTodotoFirestore,
 } from "../firebase/todoService";
-import TODOS from "../demo_data/Todos";
-const initialState = {
-  todos: [],
-};
+
+const todos = [];
 export const TodoContext = createContext({
   todos: [],
-  selectedId: false,
+  selectedId: null,
   setSelectedId: () => {},
   addTodo: () => {},
   removeTodo: () => {},
@@ -35,136 +35,154 @@ export const TodoContext = createContext({
   finishSubtask: () => {},
 });
 const TodoProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(todoReducer, initialState);
+  const [state, dispatch] = useReducer(todoReducer, { todos });
   const [selectedId, setSelectedId] = useState(null);
+  const [hasLoadedGuestTodos, setHasLoadedGuestTodos] = useState(false);
+
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
+    let unsubscribe;
     if (user) {
-      fetchTodosFromFirestore(user.uid).then((todos) => {
+      const todosRef = collection(db, "todoData", user.uid, "userTodos");
+      unsubscribe = onSnapshot(todosRef, (snapshot) => {
+        const todos = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         loadTodos(todos);
       });
     } else {
-      loadTodos(TODOS);
+      const guestTodos = JSON.parse(localStorage.getItem("guestTodos"));
+      if (guestTodos) loadTodos(guestTodos);
+      setHasLoadedGuestTodos(true);
     }
+
+    return () => unsubscribe && unsubscribe();
   }, [user]);
 
-  const addTodo = async (todo) => {
+  useEffect(() => {
+    if (!user && hasLoadedGuestTodos) {
+      localStorage.setItem("guestTodos", JSON.stringify(state.todos));
+    }
+  }, [user, state.todos, hasLoadedGuestTodos]);
+
+  const handleTodoAction = async ({
+    firestoreFn,
+    localAction,
+    successMessage,
+    errorMessage,
+  }) => {
     if (user) {
       try {
-        await addTodotoFirestore(user.uid, todo);
-        dispatch({ type: actions.ADD_TODO, payload: todo });
-      } catch (error) {
-        console.log("Error adding todo: ", error.message);
+        await firestoreFn();
+        toast.success(successMessage);
+      } catch (e) {
+        toast.error(e.message);
+        if (errorMessage) toast.success(errorMessage);
       }
     } else {
-      dispatch({ type: actions.ADD_TODO, payload: todo });
+      dispatch(localAction);
+      if (successMessage) toast.success(successMessage);
     }
+  };
+
+  const addTodo = async (todo) => {
+    await handleTodoAction({
+      firestoreFn: () => addTodotoFirestore(user.uid, todo),
+      localAction: { type: actions.ADD_TODO, payload: todo },
+      successMessage: "Task added!",
+      errorMessage: "Failed to add task!",
+    });
   };
 
   const loadTodos = (todos) => {
-    dispatch({ type: actions.L0AD_TODOS, payload: todos });
+    dispatch({ type: actions.LOAD_TODOS, payload: todos });
   };
 
   const removeTodo = async (id) => {
-    if (user) {
-      try {
-        await removeTodoFromFirestore(user.uid, id);
-        dispatch({ type: actions.REMOVE_TODO, payload: id });
-      } catch (e) {
-        console.log(e.message);
-      }
-    } else {
-      dispatch({ type: actions.REMOVE_TODO, payload: id });
-    }
+    await handleTodoAction({
+      firestoreFn: () => removeTodoFromFirestore(user.uid, id),
+      localAction: { type: actions.REMOVE_TODO, payload: id },
+      successMessage: "Task removed!",
+      errorMessage: "Failed to remove task!",
+    });
   };
+
   const editTodo = async (id, data) => {
-    if (user) {
-      try {
-        await updateTodoToFirestore(user.uid, id, data);
-        dispatch({ type: actions.EDIT_TODO, payload: { id, data } });
-      } catch (e) {
-        console.log(e.message);
-      }
-    } else dispatch({ type: actions.EDIT_TODO, payload: { id, data } });
+    await handleTodoAction({
+      firestoreFn: () => updateTodoToFirestore(user.uid, id, data),
+      localAction: { type: actions.EDIT_TODO, payload: { id, data } },
+      successMessage: "Task edited successfully!",
+      errorMessage: "Couldn't edit the task",
+    });
   };
 
   const finishTodo = async (todoId) => {
-    if (user) {
-      try {
-        await updateTodoToFirestore(user.uid, todoId, null);
-        dispatch({ type: actions.FINISH_TODO, payload: todoId });
-      } catch (e) {
-        console.log(e.message);
-      }
-    } else dispatch({ type: actions.FINISH_TODO, payload: todoId });
+    const todo = state.todos.find((t) => t.id === todoId);
+    const newStatus = !todo?.isCompleted;
+    await handleTodoAction({
+      firestoreFn: () => updateTodoToFirestore(user.uid, todoId, null),
+      localAction: { type: actions.FINISH_TODO, payload: todoId },
+      successMessage: newStatus
+        ? "Task marked as completed!"
+        : "Task marked as incomplete!",
+      errorMessage: "Failed to complete the task!",
+    });
   };
 
   const addSubtask = async (parentId, subtask) => {
-    if (user) {
-      try {
-        await addSubtaskToFirestore(user.uid, parentId, subtask);
-        dispatch({ type: actions.ADD_SUBTASK, payload: { parentId, subtask } });
-      } catch (e) {
-        console.log(e.message);
-      }
-    } else
-      dispatch({ type: actions.ADD_SUBTASK, payload: { parentId, subtask } });
+    await handleTodoAction({
+      firestoreFn: () => addSubtaskToFirestore(user.uid, parentId, subtask),
+      localAction: {
+        type: actions.ADD_SUBTASK,
+        payload: { parentId, subtask },
+      },
+      successMessage: "Subtask added!",
+      errorMessage: "Failed to add subtask!",
+    });
   };
 
   const removeSubtask = async (parentId, subtaskId) => {
-    if (user) {
-      try {
-        await removeSubtaskFromFirestore(user.uid, parentId, subtaskId);
-        dispatch({
-          type: actions.REMOVE_SUBTASK,
-          payload: { parentId, subtaskId },
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
-    } else {
-      dispatch({
+    await handleTodoAction({
+      firestoreFn: () =>
+        removeSubtaskFromFirestore(user.uid, parentId, subtaskId),
+      localAction: {
         type: actions.REMOVE_SUBTASK,
         payload: { parentId, subtaskId },
-      });
-    }
+      },
+      successMessage: "Subtask deleted!",
+      errorMessage: "Failed to delete subtask!",
+    });
   };
   const editSubtask = async (parentId, subtaskId, data) => {
-    if (user) {
-      try {
-        await updateSubtaskToFirestore(user.uid, parentId, subtaskId, data);
-        dispatch({
-          type: actions.EDIT_SUBTASK,
-          payload: { parentId, subtaskId },
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
-    } else {
-      dispatch({
+    await handleTodoAction({
+      firestoreFn: () =>
+        updateSubtaskToFirestore(user.uid, parentId, subtaskId, data),
+      localAction: {
         type: actions.EDIT_SUBTASK,
         payload: { parentId, subtaskId },
-      });
-    }
+      },
+      successMessage: "Subtask updated!",
+      errorMessage: "Failed to update subtask title",
+    });
   };
   const finishSubtask = async (parentId, subtaskId) => {
-    if (user) {
-      try {
-        await updateSubtaskToFirestore(user.uid, parentId, subtaskId, null);
-        dispatch({
-          type: actions.FINISH_SUBTASK,
-          payload: { parentId, subtaskId },
-        });
-      } catch (e) {
-        console.log(e.message);
-      }
-    } else {
-      dispatch({
+    const parentTask = state.todos.find((todo) => todo.id === parentId);
+    const subtask = parentTask.subtasks.find((task) => task.id === subtaskId);
+    const newStatus = !subtask?.isCompleted;
+    await handleTodoAction({
+      firestoreFn: () =>
+        updateSubtaskToFirestore(user.uid, parentId, subtaskId, null),
+      localAction: {
         type: actions.FINISH_SUBTASK,
         payload: { parentId, subtaskId },
-      });
-    }
+      },
+      successMessage: newStatus
+        ? "Subtask completed!"
+        : "Subtask marked as incomplete!",
+      errorMessage: "Failed to complete subtask",
+    });
   };
 
   const todoCtx = {

@@ -1,28 +1,16 @@
 import {
   doc,
-  collection,
   getDoc,
-  getDocs,
   deleteDoc,
   setDoc,
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
-import { db } from "./Firebase";
-
-export const fetchTodosFromFirestore = async (uid) => {
-  const todosRef = collection(db, "todoData", uid, "userTodos");
-  const snapshot = await getDocs(todosRef);
-  const todos = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-  return todos;
-};
+import { db } from "./config";
 
 //add a new todo to the Firestore database
 export const addTodotoFirestore = async (uid, todo) => {
-  const todoRef = doc(db, "todos", uid, "userTodos", todo.id);
+  const todoRef = doc(db, "todoData", uid, "userTodos", todo.id);
   await setDoc(todoRef, todo, { merge: true });
 };
 

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { auth } from "../firebase/Firebase";
+import { auth } from "../firebase/config";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
         username,
         password
       );
-      console.log(userCredentials);
       setUser(userCredentials.user);
     } catch (error) {
       throw new Error(error.message);
