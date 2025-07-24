@@ -29,7 +29,7 @@ const SubtaskItem = ({ item, onFinish, idx, onRemove, onEdit, parentId }) => {
         type="checkbox"
         onChange={completeSubtaskHandler}
         checked={item.isCompleted}
-        className="hover:cursor-pointer mr-2 w-6 h-6"
+        className="hover:cursor-pointer mr-2 w-5 h-5 accent-slate-500 rounded-full"
       />
       <span
         className={!item.isCompleted ? "flex-11/12" : "line-through flex-11/12"}

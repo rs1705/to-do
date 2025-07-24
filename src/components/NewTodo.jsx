@@ -1,6 +1,6 @@
 import Input from "../UI/Input";
 import Button from "../UI/Button";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
 
@@ -25,12 +25,7 @@ const NewTodo = ({ method, todo, onClose }) => {
     const description = desRef.current.value;
     const dueDate = dateRef.current.value;
     const priority = priorityRef.current.value;
-    const tags = tagsRef.current.value.split(",");
-
-    if (!title || !dueDate) {
-      alert("Empty values are not allowed.");
-      return;
-    }
+    const tags = tagsRef.current.value.trim() > 0 ? tagsRef.current.value : [];
 
     if (method === "dialog") {
       const updatedItem = {
@@ -60,7 +55,7 @@ const NewTodo = ({ method, todo, onClose }) => {
     }
   };
   return (
-    <form method={method ? method : ""}>
+    <form method={method ? method : ""} onSubmit={createTodoHandler}>
       <div className="flex flex-col">
         <Input
           labelled
@@ -97,7 +92,7 @@ const NewTodo = ({ method, todo, onClose }) => {
             ref={priorityRef}
             defaultValue={todo ? todo.priority : ""}
           >
-            <option value="">{`--Priority--`}</option>
+            <option value="Low">{`--Priority--`}</option>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
@@ -119,8 +114,8 @@ const NewTodo = ({ method, todo, onClose }) => {
             style="bg-transparent text-slate-900 hover:bg-transparent hover:text-slate-400"
           />
           <Button
+            type="submit"
             title={method === "dialog" ? "Update details" : "+ Add task"}
-            onClick={createTodoHandler}
           />
         </div>
       </div>

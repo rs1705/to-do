@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import Tags from "./Tags";
 
 const TodoItem = ({ item }) => {
+  console.log(item);
   const todoCtx = useContext(TodoContext);
   const setSelectedId = useContext(TodoContext).setSelectedId;
 
@@ -81,7 +82,7 @@ const TodoItem = ({ item }) => {
       </div>
       <div>
         <div className="todo-item-container mb-1">
-          <p className="text-slate-600 mb-2 text-md">{item.description}</p>
+          <p className="text-slate-600 mb-2 text-md ml-1">{item.description}</p>
           <Tags tagItems={item.tags} />
           <p className="text-slate-400 text-sm font-semibold mt-2 ml-1">
             Due: {item.dueDate}

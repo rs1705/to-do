@@ -3,8 +3,13 @@ import { auth } from "../firebase/config";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  updateProfile,
   signOut,
 } from "firebase/auth";
+import toast from "react-hot-toast";
 export const AuthContext = createContext({
   user: null,
   userLoggedIn: false,
@@ -28,14 +33,21 @@ export const AuthProvider = ({ children }) => {
   const logIn = async (username, password) => {
     setLoading(true);
     try {
-      const userCredentials = await signInWithEmailAndPassword(
+      const { user } = await signInWithEmailAndPassword(
         auth,
         username,
         password
       );
-      setUser(userCredentials.user);
+      if (user) {
+        setUser(user);
+        toast.success("Login successful!");
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
-      throw new Error(error.message);
+      toast.error("Invalid credentials");
+      return false;
     } finally {
       setLoading(false);
     }
@@ -44,15 +56,54 @@ export const AuthProvider = ({ children }) => {
   const logOut = async () => {
     try {
       await signOut(auth);
-    } catch (error) {
-      throw new Error(error.message);
+      toast.success("Logged out successfully!");
+    } catch (e) {
+      toast.success("Error logging out!!");
     }
   };
+
+  const signUp = async (name, email, password) => {
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(user, { displayName: name });
+      if (user) {
+        setUser(user);
+      }
+      toast.success("Signup successful!");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const provider = new GoogleAuthProvider();
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      if (user) {
+        setUser(user);
+        console.log(user);
+        toast.success("Google sign in successful!");
+        return true;
+      }
+    } catch (error) {
+      toast.error(error.message);
+      return false;
+    }
+  };
+
   const authCtx = {
     user,
     userLoggedIn: !!user,
     logIn,
     logOut,
+    signUp,
+    signInWithGoogle,
+
     loading,
   };
   return (
