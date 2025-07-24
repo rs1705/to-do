@@ -13,17 +13,19 @@ const Sidebar = () => {
     setSelectedId(id);
   };
 
-  const createTodoHandler = () => {
+  const addTaskClickHandler = () => {
     setSelectedId("add");
   };
 
   const loginClickHandler = () => {
-    setSelectedId("login");
+    setSelectedId("signin");
   };
 
   const logoutClickHandler = () => {
     logOut();
+    setSelectedId("signin");
   };
+
   return (
     <div className="bg-slate-900 text-stone-100 sidebar ">
       <div className="relative top-2 left-52">
@@ -36,11 +38,17 @@ const Sidebar = () => {
       <div className="mt-16  text-center">
         <h1 className="text-3xl font-bold">Task Manager</h1>
         <div className="flex flex-col items-center">
-          <p className="font-semibold mb-2 text-amber-500">
-            Welcome {!user ? "Guest" : user.email}!
+          <p className="font-semibold mb-2 text-slate-50">
+            Welcome{" "}
+            {!userLoggedIn
+              ? "Guest"
+              : user.displayName
+              ? user.displayName
+              : user.email}
+            !
           </p>
           <img
-            src={userLogo}
+            src={!userLoggedIn ? userLogo : user.photoURL}
             alt="user-image"
             className="w-[80px] h-[80px] rounded-full bg-slate-200"
           />
@@ -50,12 +58,12 @@ const Sidebar = () => {
         <Button
           className="bg-slate-300 hover:bg-slate-400 hover:cursor-pointer py-1 px-2 rounded text-slate-900"
           title="+ Add task"
-          onClick={createTodoHandler}
+          onClick={addTaskClickHandler}
         />
       </div>
       <div className="mt-2">
         {todos && todos.length === 0 && (
-          <p className="text-red-400 text-sm text-center">
+          <p className="text-slate-100 text-sm text-center">
             Click add button to add a new task
           </p>
         )}

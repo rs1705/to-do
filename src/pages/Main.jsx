@@ -3,6 +3,7 @@ import { TodoContext } from "../context/TodoContext";
 import NewTodo from "../components/NewTodo";
 import TodoItem from "../components/todoItem";
 import AuthPage from "./Auth";
+import Signup from "../components/Signup";
 const Home = () => {
   const todos = useContext(TodoContext).todos;
   const selectedId = useContext(TodoContext).selectedId;
@@ -11,8 +12,8 @@ const Home = () => {
 
   if (selectedId === null) {
     content = (
-      <div className="mx-2 my-40">
-        <p className="font-semibold text-amber-500">
+      <div className="text-center my-40">
+        <p className="font-semibold text-slate-500">
           {todos.length > 0
             ? "No task is selected currently. Select a task to see details."
             : "There are no tasks currently. Click add button to get started."}
@@ -29,8 +30,10 @@ const Home = () => {
         <NewTodo />
       </div>
     );
-  } else if (selectedId === "login") {
+  } else if (selectedId === "signin") {
     content = <AuthPage />;
+  } else if (selectedId === "signup") {
+    content = <Signup />;
   } else {
     content = (
       <div className="mt-40">
