@@ -1,6 +1,6 @@
 import Input from "../UI/Input";
 import Button from "../UI/Button";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
 

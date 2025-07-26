@@ -76,6 +76,7 @@ const TodoProvider = ({ children }) => {
     if (user) {
       try {
         await firestoreFn();
+        dispatch(localAction);
         toast.success(successMessage);
       } catch (e) {
         toast.error(e.message);

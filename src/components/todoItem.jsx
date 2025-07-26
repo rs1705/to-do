@@ -7,7 +7,6 @@ import Modal from "./Modal";
 import Tags from "./Tags";
 
 const TodoItem = ({ item }) => {
-  console.log(item);
   const todoCtx = useContext(TodoContext);
   const setSelectedId = useContext(TodoContext).setSelectedId;
 
