@@ -1,8 +1,8 @@
 import { useRef, useContext, useState } from "react";
-import Input from "../UI/Input";
-import Button from "../UI/Button";
-import { TodoContext } from "../context/TodoContext";
-import { AuthContext } from "../context/AuthContext";
+import Input from "../../UI/Input";
+import Button from "../../UI/Button";
+import { TodoContext } from "../../context/TodoContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const Signup = () => {
   const nameRef = useRef();
@@ -78,7 +78,7 @@ const Signup = () => {
           <Button style="w-20" type="submit" title="Sign up" />
           <p className="text-center">or</p>
           <Button
-            title="Continue with Google"
+            title="Continue with google"
             type="button"
             onClick={googleSignInHandler}
             style="bg-transparent text-slate-900 hover:bg-transparent hover:text-slate-400"

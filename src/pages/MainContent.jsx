@@ -1,23 +1,30 @@
 import { useContext } from "react";
 import { TodoContext } from "../context/TodoContext";
-import NewTodo from "../components/NewTodo";
-import TodoItem from "../components/todoItem";
+import NewTodo from "../components/Todo/NewTodo";
+import TodoItem from "../components/Todo/TodoItem";
 import AuthPage from "./Auth";
-import Signup from "../components/Signup";
-const Home = () => {
+import Signup from "../components/Auth/Signup";
+import Button from "../UI/Button";
+const MainContent = () => {
   const todos = useContext(TodoContext).todos;
-  const selectedId = useContext(TodoContext).selectedId;
+  const { selectedId, setSelectedId } = useContext(TodoContext);
   const selectedTodo = todos.find((todo) => todo.id === selectedId);
   let content;
 
   if (selectedId === null) {
     content = (
       <div className="text-center my-40 sm:my-32 md:my-40 px-4">
-        <p className="font-semibold text-slate-500">
+        <p className="font-semibold text-slate-600">
           {todos.length > 0
             ? "No task is selected currently. Select a task to see details."
             : "There are no tasks currently. Click add button to get started."}
         </p>
+        <br />
+        <Button
+          className="bg-slate-600 hover:bg-slate-500 hover:cursor-pointer py-1 px-2 rounded-md text-slate-100"
+          title="+ Add task"
+          onClick={() => setSelectedId("add")}
+        />
       </div>
     );
   } else if (selectedId === "add") {
@@ -44,10 +51,10 @@ const Home = () => {
     );
   }
   return (
-    <div className="w-[100%] dark:bg-slate-900  min-h-screen px-2 sm:px-2 py-4 transition-all duration-300">
+    <div className="w-full lg:w-[60%] dark:bg-slate-900  min-h-screen px-2 sm:px-2 py-4 transition-all duration-300">
       {content}
     </div>
   );
 };
 
-export default Home;
+export default MainContent;

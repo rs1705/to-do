@@ -1,4 +1,4 @@
-import * as actions from "./todoActions";
+import * as actions from "./TodoActions";
 const todoReducer = (state, action) => {
   switch (action.type) {
     case actions.LOAD_TODOS: {

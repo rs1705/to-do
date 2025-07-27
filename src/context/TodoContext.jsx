@@ -7,8 +7,8 @@ import {
   useState,
 } from "react";
 import toast from "react-hot-toast";
-import todoReducer from "./todoReducer";
-import * as actions from "./todoActions";
+import todoReducer from "./TodoReducer";
+import * as actions from "./TodoActions";
 import { AuthContext } from "./AuthContext";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/config";
@@ -200,7 +200,7 @@ const TodoProvider = ({ children }) => {
     });
   };
 
-  const todoCtx = {
+  const todoCtx = useMemo(() => ({
     todos: state.todos,
     filteredTodos,
     setSearchTerm,
@@ -214,7 +214,7 @@ const TodoProvider = ({ children }) => {
     removeSubtask,
     editSubtask,
     finishSubtask,
-  };
+  }));
 
   return (
     <TodoContext.Provider value={todoCtx}>{children}</TodoContext.Provider>

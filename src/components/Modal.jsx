@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { useEffect } from "react";
-import NewTodo from "./NewTodo";
+import NewTodo from "./Todo/NewTodo";
 
 const Modal = ({ todo, onClose }) => {
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
 import { Check, SquarePen, X } from "lucide-react";
-import Input from "../UI/Input";
+import Input from "../../UI/Input";
 
 const SubtaskItem = ({ item, onFinish, idx, onRemove, onEdit, parentId }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -52,7 +52,9 @@ const SubtaskItem = ({ item, onFinish, idx, onRemove, onEdit, parentId }) => {
       </span>
       <div className="inline-flex  justify-end">
         <button
-          className="bg-slate-50 hover:bg-slate-300 hover:cursor-pointer rounded-full m-1 p-1"
+          className={`bg-slate-50 hover:bg-slate-300 rounded-full m-1 p-1 ${
+            item.isCompleted ? "cursor-not-allowed" : "hover:cursor-pointer "
+          }`}
           onClick={editSubtaskHandler}
           disabled={item.isCompleted}
         >

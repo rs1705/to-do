@@ -1,8 +1,8 @@
-import Input from "../UI/Input";
-import Button from "../UI/Button";
+import Input from "../../UI/Input";
+import Button from "../../UI/Button";
 import { useRef } from "react";
 import { useContext } from "react";
-import { TodoContext } from "../context/TodoContext";
+import { TodoContext } from "../../context/TodoContext";
 
 const NewTodo = ({ method, todo, onClose }) => {
   const todoCtx = useContext(TodoContext);

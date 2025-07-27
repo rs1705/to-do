@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import Button from "../UI/Button";
-import Input from "../UI/Input";
+import Button from "../../UI/Button";
+import Input from "../../UI/Input";
 
 const NewSubtask = ({ id, parentId, onAddSubtask, onDisabled }) => {
   const subTaskRef = useRef();

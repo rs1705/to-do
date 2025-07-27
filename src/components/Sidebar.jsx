@@ -42,9 +42,9 @@ const Sidebar = ({ isOpen, onClose }) => {
         fixed top-0 left-0 h-[100vh] z-50 text-slate-100
         bg-slate-900 dark:bg-slate-800 shadow-md
         w-[60%]
-        sm:w-[45%]
-        md:w-[420px]
-        lg:w-[380px]
+        sm:w-[320px]
+        md:w-[320px]
+        lg:w-[320px]
         
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -56,6 +56,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           title={!userLoggedIn ? "Login" : "Logout"}
           onClick={!userLoggedIn ? loginClickHandler : logoutClickHandler}
           style="mx-1 dark:bg-gray-700 dark:text-white"
+          aria-label="login-btn"
         />
       </div>
       <div className="mt-16  text-center">
@@ -112,6 +113,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               <ol>
                 {todos.map((todo) => (
                   <li
+                    aria-label="task-item"
                     key={todo.id}
                     className={`list-disc hover:bg-slate-500 pl-2 p-1 hover:text-slate-200 hover:cursor-pointer text-md ${
                       todo.id === selectedId ? "bg-slate-500 text-white" : ""

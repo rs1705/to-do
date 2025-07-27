@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
-import { TodoContext } from "../context/TodoContext";
-import Subtasks from "./Subtask";
+import { TodoContext } from "../../context/TodoContext";
+import Subtasks from "../Subtask/Subtasks";
 import { Check, SquarePen, X } from "lucide-react";
-import NewSubtask from "./NewSubtask";
-import Modal from "./Modal";
+import NewSubtask from "../Subtask/NewSubtask";
+import Modal from "../Modal";
 import Tags from "./Tags";
-import ConfirmationDialog from "../UI/ConfirmationDialog";
+import ConfirmationDialog from "../../UI/ConfirmationDialog";
 
 const TodoItem = ({ item }) => {
   const todoCtx = useContext(TodoContext);
@@ -79,7 +79,10 @@ const TodoItem = ({ item }) => {
             <Check />
           </button>
           <button
-            className="bg-slate-200 hover:bg-slate-300 hover:cursor-pointer rounded-full m-1 p-1"
+            className={`bg-slate-200 hover:bg-slate-300 rounded-full m-1 p-1 ${
+              item.isCompleted ? "cursor-not-allowed" : "hover:cursor-pointer"
+            }`}
+            disabled={item.isCompleted}
             onClick={openModal}
           >
             <SquarePen />

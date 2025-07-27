@@ -1,12 +1,51 @@
-# React + Vite
+# ✅ Task Master – Firebase Todo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fully functional, responsive Todo App built with **React + Firebase + Context API**. Manage your daily tasks with ease, track subtasks, and sync your data in real time.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🔒 Authentication (Email/Password & Google)
+- 📄 Add, Edit, Delete Todos
+- ✅ Mark complete/incomplete
+- 📌 Subtasks with progress bar
+- 🔍 Live search filter
+- ⚡ Real-time updates (Firestore `onSnapshot`)
+- 📱 Responsive design with collapsible sidebar
+- 🌗 Dark mode friendly (tailored styles)
+- 🔔 Toast notifications on all major actions
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧑‍💻 Tech Stack
+
+- **Frontend:** React, Vite, Tailwind CSS
+- **State Management:** React Context + Reducer
+- **Backend:** Firebase Auth & Firestore
+- **UX/UI:** React Hot Toast, conditional rendering, error boundaries
+
+---
+
+## 📁 Folder Structure
+
+src/
+├── components/ # Sidebar, Login, Modal, SubtaskItem, etc.
+├── context/ # AuthContext, TodoContext
+├── UI/ # Reusable UI components (Button, Input, ProgressBar)
+├── firebase/ # Firebase config
+└── App.jsx # Main app logic
+
+---
+
+## 🧪 Setup & Run Locally
+
+```bash
+git clone https://github.com/rs1705/to-do.git
+cd to-do
+npm install
+npm run dev
+```
+
+🙌 Author
+Made with ❤️ by Rahul Saini

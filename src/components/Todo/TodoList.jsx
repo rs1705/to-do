@@ -1,11 +1,10 @@
 import { useContext } from "react";
-import { TodoContext } from "../context/TodoContext";
+import { TodoContext } from "../../context/TodoContext";
 
-import TodoItem from "./todoItem";
+import TodoItem from "./TodoItem";
 const TodoList = () => {
   const todoCtx = useContext(TodoContext);
   const todos = todoCtx.todos;
-  console.log(todos);
   return (
     <div className="flex flex-col w-full h-full">
       {todos.length > 0 ? (

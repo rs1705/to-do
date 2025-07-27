@@ -86,7 +86,6 @@ export const AuthProvider = ({ children }) => {
       const user = result.user;
       if (user) {
         setUser(user);
-        console.log(user);
         toast.success("Google sign in successful!");
         return true;
       }

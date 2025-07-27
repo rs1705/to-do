@@ -1,8 +1,8 @@
 import { useRef, useState, useContext } from "react";
-import Input from "../UI/Input";
-import Button from "../UI/Button";
-import { AuthContext } from "../context/AuthContext";
-import { TodoContext } from "../context/TodoContext";
+import Input from "../../UI/Input";
+import Button from "../../UI/Button";
+import { AuthContext } from "../../context/AuthContext";
+import { TodoContext } from "../../context/TodoContext";
 const Login = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();

@@ -1,4 +1,4 @@
-import ProgressBar from "../UI/ProgressBar";
+import ProgressBar from "../../UI/ProgressBar";
 import SubtaskItem from "./SubtaskItem";
 const Subtasks = ({
   parentId,
