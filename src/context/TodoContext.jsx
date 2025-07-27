@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   useState,
 } from "react";
@@ -23,6 +24,9 @@ import {
 const todos = [];
 export const TodoContext = createContext({
   todos: [],
+  filteredTodos: [],
+  searchTerm: "",
+  setSearchTerm: () => {},
   selectedId: null,
   setSelectedId: () => {},
   addTodo: () => {},
@@ -37,6 +41,7 @@ export const TodoContext = createContext({
 const TodoProvider = ({ children }) => {
   const [state, dispatch] = useReducer(todoReducer, { todos });
   const [selectedId, setSelectedId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [hasLoadedGuestTodos, setHasLoadedGuestTodos] = useState(false);
 
   const { user } = useContext(AuthContext);
@@ -67,6 +72,16 @@ const TodoProvider = ({ children }) => {
     }
   }, [user, state.todos, hasLoadedGuestTodos]);
 
+  const filteredTodos = useMemo(() => {
+    if (!searchTerm) {
+      return state.todos;
+    }
+    const lowercasedSearchTerm = searchTerm.toLowerCase();
+    return state.todos.filter((todo) =>
+      todo.title.toLowerCase().includes(lowercasedSearchTerm)
+    );
+  }, [state.todos, searchTerm]);
+
   const handleTodoAction = async ({
     firestoreFn,
     localAction,
@@ -76,7 +91,6 @@ const TodoProvider = ({ children }) => {
     if (user) {
       try {
         await firestoreFn();
-        dispatch(localAction);
         toast.success(successMessage);
       } catch (e) {
         toast.error(e.message);
@@ -188,6 +202,8 @@ const TodoProvider = ({ children }) => {
 
   const todoCtx = {
     todos: state.todos,
+    filteredTodos,
+    setSearchTerm,
     selectedId,
     setSelectedId,
     addTodo,

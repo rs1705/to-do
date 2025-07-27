@@ -28,7 +28,7 @@ const Login = () => {
   };
 
   return (
-    <div className="mt-40 ml-2 border-2 border-slate-300 rounded-xl py-5 px-2 w-[100%]">
+    <div className="mt-40 border-2 border-slate-300 rounded-xl py-5 px-2 w-[100%]">
       <h2 className="text-2xl font-semibold text-center">Login</h2>
       <p className="text-md text-slate-500 text-center mb-2">
         Login with your credentials to save your data.

@@ -25,7 +25,7 @@ const NewTodo = ({ method, todo, onClose }) => {
     const description = desRef.current.value;
     const dueDate = dateRef.current.value;
     const priority = priorityRef.current.value;
-    const tags = tagsRef.current.value.trim() > 0 ? tagsRef.current.value : [];
+    const tags = tagsRef.current.value.split(",");
 
     if (method === "dialog") {
       const updatedItem = {

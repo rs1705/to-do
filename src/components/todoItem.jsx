@@ -5,12 +5,14 @@ import { Check, SquarePen, X } from "lucide-react";
 import NewSubtask from "./NewSubtask";
 import Modal from "./Modal";
 import Tags from "./Tags";
+import ConfirmationDialog from "../UI/ConfirmationDialog";
 
 const TodoItem = ({ item }) => {
   const todoCtx = useContext(TodoContext);
   const setSelectedId = useContext(TodoContext).setSelectedId;
 
   const [editing, setEditing] = useState(false);
+  const [isDeleting, setIsDeleteing] = useState(false);
 
   const openModal = () => {
     setEditing(true);
@@ -20,13 +22,18 @@ const TodoItem = ({ item }) => {
   };
 
   const removeTodoHandler = () => {
-    let ans = confirm("Delete the item?");
-    if (ans) {
+    if (isDeleting) {
       todoCtx.removeTodo(item.id);
       setSelectedId(null);
     }
   };
 
+  const closeConfirmModalHandler = () => {
+    setIsDeleteing(false);
+  };
+  const openConfirmModalHandler = () => {
+    setIsDeleteing(true);
+  };
   const finishTodoHandler = () => {
     todoCtx.finishTodo(item.id);
   };
@@ -45,18 +52,24 @@ const TodoItem = ({ item }) => {
   let styles = item.isCompleted ? " line-through" : " ";
 
   return (
-    <div className="ml-2">
+    <div>
       <p className="text-slate-600 font-bold text-sm">
         <span className={priorityStyle}>{item.priority}</span>
       </p>
-      <div className="todo-title-container flex">
+      <div className="flex">
         <div className="inline-flex w-[90%] mt-1 font-bold">
           <h2 className={"text-slate-700 w-[100%] text-3xl" + styles}>
             {item.title}
           </h2>
         </div>
 
-        {editing && item && <Modal todo={item} onClose={closeModal} />}
+        {editing && <Modal todo={item} onClose={closeModal} />}
+        {isDeleting && (
+          <ConfirmationDialog
+            onConfirm={removeTodoHandler}
+            onClose={closeConfirmModalHandler}
+          />
+        )}
 
         <div className="inline-flex  justify-end">
           <button
@@ -73,7 +86,7 @@ const TodoItem = ({ item }) => {
           </button>
           <button
             className="bg-slate-200 hover:bg-slate-300 hover:cursor-pointer rounded-full m-1 p-1"
-            onClick={removeTodoHandler}
+            onClick={openConfirmModalHandler}
           >
             <X />
           </button>

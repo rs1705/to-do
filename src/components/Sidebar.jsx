@@ -5,39 +5,61 @@ import userLogo from "../assets/userLogo.png";
 import { AuthContext } from "../context/AuthContext";
 import Input from "../UI/Input";
 
-const Sidebar = () => {
-  const todos = useContext(TodoContext).todos;
-
-  const { setSelectedId, selectedId } = useContext(TodoContext);
+const Sidebar = ({ isOpen, onClose }) => {
+  const todos = useContext(TodoContext).filteredTodos;
+  const { setSelectedId, selectedId, setSearchTerm } = useContext(TodoContext);
   const { user, logOut, userLoggedIn } = useContext(AuthContext);
+
+  const closeIfSmallScreen = () => {
+    if (window.innerWidth < 768) {
+      onClose?.();
+    }
+  };
   const selectTodoHandler = (id) => {
     setSelectedId(id);
+    closeIfSmallScreen();
   };
 
   const addTaskClickHandler = () => {
     setSelectedId("add");
+    closeIfSmallScreen();
   };
 
   const loginClickHandler = () => {
     setSelectedId("signin");
+    closeIfSmallScreen();
   };
 
   const logoutClickHandler = () => {
     logOut();
     setSelectedId("signin");
+    closeIfSmallScreen();
   };
 
   return (
-    <div className="bg-slate-900 text-stone-100 sidebar ">
-      <div className="relative top-2 left-52">
+    <div
+      className={`
+        fixed top-0 left-0 h-[100vh] z-50 text-slate-100
+        bg-slate-900 dark:bg-slate-800 shadow-md
+        w-[60%]
+        sm:w-[45%]
+        md:w-[420px]
+        lg:w-[380px]
+        
+        transform transition-transform duration-300 ease-in-out
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0 md:static md:shadow-none md:w-[280px]
+      `}
+    >
+      <div className="flex flex-row-reverse mx-1 my-1">
         <Button
-          className="bg-slate-300 hover:bg-slate-400 hover:cursor-pointer py-1 px-2 rounded text-slate-900"
           title={!userLoggedIn ? "Login" : "Logout"}
           onClick={!userLoggedIn ? loginClickHandler : logoutClickHandler}
+          style="mx-1 dark:bg-gray-700 dark:text-white"
         />
       </div>
       <div className="mt-16  text-center">
-        <h1 className="text-3xl font-bold">Task Manager</h1>
+        <h1 className="text-3xl font-bold">Task Master</h1>
         <div className="flex flex-col items-center">
           <p className="font-semibold mb-2 text-slate-50">
             Welcome{" "}
@@ -69,25 +91,23 @@ const Sidebar = () => {
         />
       </div>
       <div className="mt-2">
-        {!todos && todos.length === 0 && (
+        {todos.length === 0 && (
           <p className="text-slate-100 text-sm text-center">
             Click add button to add a new task
           </p>
         )}
         {todos && (
           <div className="flex flex-col items-center w-full">
-            <div className="w-full">
+            <div className="w-full justify-center">
               <p className="text-center">
                 <span>My tasks {`(${todos.length})`}</span>
               </p>
-              <div className="flex justify-center">
-                <Input
-                  title="Search task..."
-                  type="text"
-                  style="text-slate-50 bg-slate-600 text-center mt-1 focus:border-0"
-                  defaultValue=""
-                />
-              </div>
+              <Input
+                title="Search task..."
+                type="text"
+                style="text-slate-50 bg-slate-600 text-center my-1 mx-4"
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
               <br />
               <ol>
                 {todos.map((todo) => (
