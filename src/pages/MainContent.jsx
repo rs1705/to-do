@@ -5,6 +5,7 @@ import TodoItem from "../components/Todo/TodoItem";
 import AuthPage from "./Auth";
 import Signup from "../components/Auth/Signup";
 import Button from "../UI/Button";
+import About from "./About";
 const MainContent = () => {
   const todos = useContext(TodoContext).todos;
   const { selectedId, setSelectedId } = useContext(TodoContext);
@@ -43,6 +44,8 @@ const MainContent = () => {
     content = <AuthPage />;
   } else if (selectedId === "signup") {
     content = <Signup />;
+  } else if (selectedId === "about") {
+    content = <About />;
   } else {
     content = (
       <div className="mt-10 sm:mt-20 md:mt-32 px-4">

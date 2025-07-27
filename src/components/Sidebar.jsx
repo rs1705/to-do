@@ -32,10 +32,13 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const logoutClickHandler = () => {
     logOut();
-    setSelectedId("signin");
+    setSelectedId(null);
     closeIfSmallScreen();
   };
 
+  const onAboutClick = () => {
+    setSelectedId("about");
+  };
   return (
     <div
       className={`
@@ -57,6 +60,12 @@ const Sidebar = ({ isOpen, onClose }) => {
           onClick={!userLoggedIn ? loginClickHandler : logoutClickHandler}
           style="mx-1 dark:bg-gray-700 dark:text-white"
           aria-label="login-btn"
+        />
+        <Button
+          title="About"
+          onClick={onAboutClick}
+          style="bg-transparent text-slate-100 hover:bg-transparent hover:text-slate-400"
+          aria-label="about-btn"
         />
       </div>
       <div className="mt-16  text-center">

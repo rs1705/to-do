@@ -38,6 +38,10 @@ src/
 
 ---
 
+## 🚀 Live Demo
+
+🔗 [Click here to use the app](https://todo-main-62555.web.app/)c
+
 ## 🧪 Setup & Run Locally
 
 ```bash
