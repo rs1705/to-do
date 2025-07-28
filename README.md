@@ -13,7 +13,6 @@ A fully functional, responsive Todo App built with **React + Firebase + Context 
 - 🔍 Live search filter
 - ⚡ Real-time updates (Firestore `onSnapshot`)
 - 📱 Responsive design with collapsible sidebar
-- 🌗 Dark mode friendly (tailored styles)
 - 🔔 Toast notifications on all major actions
 
 ---
