@@ -3,7 +3,7 @@ import Button from "../../UI/Button";
 import { useRef } from "react";
 import { useContext } from "react";
 import { TodoContext } from "../../context/TodoContext";
-
+import { createId } from "../../Utils";
 const NewTodo = ({ method, todo, onClose }) => {
   const todoCtx = useContext(TodoContext);
   const titleRef = useRef();
@@ -38,7 +38,7 @@ const NewTodo = ({ method, todo, onClose }) => {
       todoCtx.editTodo(todo.id, updatedItem);
       onClose();
     } else {
-      const newItemId = "id_" + Math.random().toString(16).slice(2);
+      const newItemId = createId();
       const newItem = {
         id: newItemId,
         title,

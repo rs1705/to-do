@@ -17,7 +17,7 @@ const SubtaskItem = ({ item, onFinish, idx, onRemove, onEdit, parentId }) => {
 
   const editSubtaskHandler = () => {
     if (isEditing) {
-      const newTitle = titleRef.current.value;
+      const newTitle = titleRef.current.value.trim();
       if (newTitle && newTitle !== item.title)
         onEdit(parentId, item.id, { title: newTitle });
     }

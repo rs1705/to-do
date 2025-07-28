@@ -1,15 +1,16 @@
 import { useRef } from "react";
 import Button from "../../UI/Button";
 import Input from "../../UI/Input";
+import { createId } from "../../Utils";
 
-const NewSubtask = ({ id, parentId, onAddSubtask, onDisabled }) => {
+const NewSubtask = ({ parentId, onAddSubtask, onDisabled }) => {
   const subTaskRef = useRef();
 
   const addSubtaskHandler = () => {
     const subtaskTitle = subTaskRef.current.value;
     if (subtaskTitle.trim().length > 0) {
       const subtask = {
-        id,
+        id: createId(),
         title: subtaskTitle,
         isCompleted: false,
       };

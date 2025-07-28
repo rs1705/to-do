@@ -23,7 +23,7 @@ const Subtasks = ({
       {tasks.map((subtask, idx) => {
         return (
           <SubtaskItem
-            key={parentId + subtask.id}
+            key={subtask.id}
             item={subtask}
             onFinish={onFinishSubtask}
             onRemove={onRemoveSubtask}

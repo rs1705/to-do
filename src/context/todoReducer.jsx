@@ -60,8 +60,8 @@ const todoReducer = (state, action) => {
       return { ...state, todos: updatedTodos };
     }
     case actions.EDIT_SUBTASK: {
-      const updatedTodos = state.todos.map((item) =>
-        item.id === action.payload.parentId
+      const updatedTodos = state.todos.map((item) => {
+        return item.id === action.payload.parentId
           ? {
               ...item,
               subtasks: item.subtasks.map((subtask) =>
@@ -70,8 +70,8 @@ const todoReducer = (state, action) => {
                   : subtask
               ),
             }
-          : item
-      );
+          : item;
+      });
 
       return {
         ...state,

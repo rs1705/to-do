@@ -105,9 +105,9 @@ const TodoItem = ({ item }) => {
         </div>
         <div>
           <br />
+
           <NewSubtask
             parentId={item.id}
-            id={item.id + item.subtasks.length + 1}
             onAddSubtask={todoCtx.addSubtask}
             onDisabled={item.isCompleted}
           />

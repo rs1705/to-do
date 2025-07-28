@@ -20,12 +20,10 @@ const App = () => {
   };
   return (
     <>
-      <Toaster position="top-middle" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
 
-      <div className="md:hidden p-4 flex justify-between items-center bg-slate-900 dark:bg-slate-900">
-        <h1 className="text-xl font-bold text-slate-100 dark:text-white">
-          Task Master
-        </h1>
+      <div className="md:hidden p-4 flex justify-between items-center bg-slate-900 ">
+        <h1 className="text-xl font-bold text-slate-100 ">Task Master</h1>
         <div className="flex">
           {userLoggedIn ? (
             <p className="text-slate-100 mt-1">

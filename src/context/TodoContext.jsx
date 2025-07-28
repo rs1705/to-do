@@ -176,7 +176,7 @@ const TodoProvider = ({ children }) => {
         updateSubtaskToFirestore(user.uid, parentId, subtaskId, data),
       localAction: {
         type: actions.EDIT_SUBTASK,
-        payload: { parentId, subtaskId },
+        payload: { parentId, subtaskId, data },
       },
       successMessage: "Subtask updated!",
       errorMessage: "Failed to update subtask title",

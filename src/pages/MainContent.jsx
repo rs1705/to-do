@@ -6,6 +6,7 @@ import AuthPage from "./Auth";
 import Signup from "../components/Auth/Signup";
 import Button from "../UI/Button";
 import About from "./About";
+
 const MainContent = () => {
   const todos = useContext(TodoContext).todos;
   const { selectedId, setSelectedId } = useContext(TodoContext);
@@ -30,11 +31,11 @@ const MainContent = () => {
     );
   } else if (selectedId === "add") {
     content = (
-      <div className="sm:mt-20 md:mt-32 ml-2 border-2 border-slate-300 dark:border-slate-600 rounded-xl py-5 px-4 w-full">
-        <h1 className="text-xl sm:text-2xl font-semibold text-center text-slate-700 dark:text-slate-100">
+      <div className="sm:mt-20 md:mt-32 ml-2 border-2 border-slate-300  rounded-xl py-5 px-4 w-full">
+        <h1 className="text-xl sm:text-2xl font-semibold text-center text-slate-700">
           Create New Task
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 text-center mb-2">
+        <p className="text-sm text-slate-500  text-center mb-2">
           Enter below details to create a new Task
         </p>
         <NewTodo />
@@ -54,7 +55,7 @@ const MainContent = () => {
     );
   }
   return (
-    <div className="w-full lg:w-[60%] dark:bg-slate-900  min-h-screen px-2 sm:px-2 py-4 transition-all duration-300">
+    <div className="w-full lg:w-[60%] min-h-screen px-2 sm:px-2 py-4 transition-all duration-300">
       {content}
     </div>
   );

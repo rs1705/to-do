@@ -4,50 +4,47 @@ import { useContext } from "react";
 import userLogo from "../assets/userLogo.png";
 import { AuthContext } from "../context/AuthContext";
 import Input from "../UI/Input";
+import { closeIfSmallScreen } from "../Utils";
 
 const Sidebar = ({ isOpen, onClose }) => {
   const todos = useContext(TodoContext).filteredTodos;
   const { setSelectedId, selectedId, setSearchTerm } = useContext(TodoContext);
   const { user, logOut, userLoggedIn } = useContext(AuthContext);
 
-  const closeIfSmallScreen = () => {
-    if (window.innerWidth < 768) {
-      onClose?.();
-    }
-  };
   const selectTodoHandler = (id) => {
     setSelectedId(id);
-    closeIfSmallScreen();
+    closeIfSmallScreen(onClose);
   };
 
   const addTaskClickHandler = () => {
     setSelectedId("add");
-    closeIfSmallScreen();
+    closeIfSmallScreen(onClose);
   };
 
   const loginClickHandler = () => {
     setSelectedId("signin");
-    closeIfSmallScreen();
+    closeIfSmallScreen(onClose);
   };
 
   const logoutClickHandler = () => {
     logOut();
     setSelectedId(null);
-    closeIfSmallScreen();
+    closeIfSmallScreen(onClose);
   };
 
   const onAboutClick = () => {
     setSelectedId("about");
+    closeIfSmallScreen(onClose);
   };
   return (
     <div
       className={`
         fixed top-0 left-0 h-[100vh] z-50 text-slate-100
-        bg-slate-900 dark:bg-slate-800 shadow-md
+        bg-slate-900 shadow-md
         w-[60%]
         sm:w-[320px]
-        md:w-[320px]
-        lg:w-[320px]
+        md:w-[380px]
+        lg:w-[300px]
         
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -58,7 +55,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         <Button
           title={!userLoggedIn ? "Login" : "Logout"}
           onClick={!userLoggedIn ? loginClickHandler : logoutClickHandler}
-          style="mx-1 dark:bg-gray-700 dark:text-white"
+          style="mx-1"
           aria-label="login-btn"
         />
         <Button
@@ -106,7 +103,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             Click add button to add a new task
           </p>
         )}
-        {todos && (
+        {todos.length > 0 && (
           <div className="flex flex-col items-center w-full">
             <div className="w-full justify-center">
               <p className="text-center">
